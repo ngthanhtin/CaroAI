@@ -609,7 +609,7 @@ class Board(object):
                         elif state_head == 0:
                             top2_attack.append(combination[0] - self.grid_size - 1)
                         elif state_tail == 0:
-                            top2_attack(combination[2] + self.grid_size + 1)
+                            top2_attack.append(combination[2] + self.grid_size + 1)
 
                 elif combination[0] + self.grid_size - 1 == combination[1]:
                 #     """
