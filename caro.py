@@ -112,22 +112,30 @@ class Board(object):
                     * x *
                     * * *
                 """
-                if self.boxes[move - self.grid_size - 1].state == 0:
-                    possible_ai_moves.append(move - self.grid_size - 1)
-                if self.boxes[move - self.grid_size].state == 0:
-                    possible_ai_moves.append(move - self.grid_size)
-                if self.boxes[move - self.grid_size + 1].state == 0:
-                    possible_ai_moves.append(move - self.grid_size + 1)
-                if self.boxes[move - 1].state == 0:
-                    possible_ai_moves.append(move - 1)
-                if self.boxes[move + 1].state == 0:
-                    possible_ai_moves.append(move + 1)
-                if self.boxes[move + self.grid_size - 1].state == 0:
-                    possible_ai_moves.append(move + self.grid_size - 1)
-                if self.boxes[move + self.grid_size].state == 0:
-                    possible_ai_moves.append(move + self.grid_size)
-                if self.boxes[move + self.grid_size + 1].state == 0:
-                    possible_ai_moves.append(move + self.grid_size + 1)
+                if (move - self.grid_size - 1) >= 0 and (move - self.grid_size - 1) < len(self.boxes):
+                    if self.boxes[move - self.grid_size - 1].state == 0:
+                        possible_ai_moves.append(move - self.grid_size - 1)
+                if (move - self.grid_size) >= 0 and (move - self.grid_size) < len(self.boxes):
+                    if self.boxes[move - self.grid_size].state == 0:
+                        possible_ai_moves.append(move - self.grid_size)
+                if (move - self.grid_size + 1) >= 0 and (move - self.grid_size + 1) < len(self.boxes):
+                    if self.boxes[move - self.grid_size + 1].state == 0:
+                        possible_ai_moves.append(move - self.grid_size + 1)
+                if (move - 1) >= 0 and (move - 1) < len(self.boxes):
+                    if self.boxes[move - 1].state == 0:
+                        possible_ai_moves.append(move - 1)
+                if (move + 1) >= 0 and (move + 1) < len(self.boxes):
+                    if self.boxes[move + 1].state == 0:
+                        possible_ai_moves.append(move + 1)
+                if (move + self.grid_size - 1) >= 0 and (move + self.grid_size - 1) < len(self.boxes):
+                    if self.boxes[move + self.grid_size - 1].state == 0:
+                        possible_ai_moves.append(move + self.grid_size - 1)
+                if (move + self.grid_size) >= 0 and (move + self.grid_size) < len(self.boxes):
+                    if self.boxes[move + self.grid_size].state == 0:
+                        possible_ai_moves.append(move + self.grid_size)
+                if (move + self.grid_size + 1) >= 0 and (move + self.grid_size + 1) < len(self.boxes):
+                    if self.boxes[move + self.grid_size + 1].state == 0:
+                        possible_ai_moves.append(move + self.grid_size + 1)
 
                 # get rid of invalid moves at the boundaries
                 if move % self.grid_size == 0:
