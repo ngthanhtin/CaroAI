@@ -1,5 +1,5 @@
 import pygame, itertools
-
+import random
 
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
@@ -56,7 +56,9 @@ class Board(object):
     
     def initialize_boxes(self):
         self.boxes = []
-        
+        self.x_boxes = []
+        self.o_boxes = []
+
         top_left_numbers = []
         for i in range(0, self.grid_size):
             num = ((i * self.box_size) + self.border + (i *self.line_width))
@@ -100,13 +102,32 @@ class Board(object):
         if self.turn != 2:
             return
         #define AI here
-        for index, box in enumerate(self.boxes):
-            if box.state == 0:
-                box.mark_o()
-                box.state = 2
+        def ai_1():
+            for index, box in enumerate(self.boxes):
+                if box.state == 0:
+                    box.mark_o()
+                    box.state = 2
+                    self.turn = 1
+                    return
+        
+        def ai_2():
+            index = self.find_for_four_combinations()
+            print(index)
+            if index is not None:
+                self.boxes[index].mark_o()
+                self.boxes[index].state = 2
                 self.turn = 1
                 return
+            else:
+                for index, box in enumerate(self.boxes):
+                    if box.state == 0:
+                        box.mark_o()
+                        box.state = 2
+                        self.turn = 1
+                        return
 
+        ai_2()
+        
     def calculate_winners(self):
         self.winning_combinations = []
         self.four_combinations = []
@@ -203,8 +224,6 @@ class Board(object):
             for u in range(len(tmp) - 4):
                 self.winning_combinations += [tuple(tmp[u:u+5])]
 
-        
-
         # calculate four combinations
         for combination in self.winning_combinations:
             for i in range(5 - 4 + 1):
@@ -215,6 +234,48 @@ class Board(object):
             for i in range(5 - 3 + 1):
                 self.three_combinations += [tuple(combination[i:i+3])]
 
+    def find_for_four_combinations(self):
+        for combination in self.four_combinations:
+            states = []
+            for index in combination:
+                states.append(self.boxes[index].state)
+            if all(x == 1 for x in states):
+                if combination[0] + 1 == combination[1]: #vertical
+                    if combination[0] % self.grid_size == 0:
+                        state = self.boxes[combination[3] + 1].state
+                        if state == 0:
+                            return combination[3] + 1
+                    elif (combination[3] + 1) % self.grid_size == 0:
+                        state = self.boxes[combination[0] - 1].state
+                        if state == 0:
+                            return combination[0] - 1
+                    else:
+                        state_head = self.boxes[combination[0] - 1].state
+                        state_tail = self.boxes[combination[3] + 1].state
+                        if state_head == 0 and state_tail == 0:
+                            return random.choice([combination[0] - 1, combination[3] + 1])
+                        elif state_head == 0:
+                            return combination[0] - 1
+                        elif state_tail == 0:
+                            return combination[3] + 1
+
+                # elif combination[0] + self.grid_size == combination[1]: #horizontal
+                
+                # elif combination[0] + self.grid_size + 1 == combination[1]:
+                #     """
+                #     *
+                #      *
+                #       *
+                #     """
+                # elif combination[0] + self.grid_size - 1 == combination[1]:
+                #     """
+                #        *
+                #       *
+                #      *
+                #     """
+                # if combination[0] - 1
+        
+        return None
     def check_for_winner(self):
         winner = 0
         for combination in self.winning_combinations:
