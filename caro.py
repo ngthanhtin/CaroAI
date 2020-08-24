@@ -174,7 +174,7 @@ class Board(object):
             self.turn = 1
         
         def ai_2():
-            index = self.find_for_four_combinations()
+            index = self.defend_four_combinations()
             if index is not None:
                 self.boxes[index].mark_o()
                 self.boxes[index].state = 2
@@ -299,7 +299,7 @@ class Board(object):
             for i in range(5 - 3 + 1):
                 self.three_combinations += [tuple(combination[i:i+3])]
 
-    def find_for_four_combinations(self):
+    def defend_four_combinations(self):
         """
         return index of moveable box
         """
@@ -402,6 +402,19 @@ class Board(object):
                             return combination[3] + self.grid_size - 1
         
         return None
+
+    def defend_three_combinations(self):
+        pass
+
+    def defend_two_combinations(self):
+        pass
+
+    def attack_four_combinations(self):
+        pass
+    def attack_three_combinations(self):
+        pass
+    def attack_two_combinations(self):
+        pass
 
     def check_for_winner(self):
         winner = 0
