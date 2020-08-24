@@ -182,25 +182,25 @@ class Board(object):
             self.turn = 1
         
         def ai_2():
-            index = self.defend_four_combinations()
+            index = self.attack_four_combinations()
             if index is not None:
+                print('attack')
                 self.boxes[index].mark_o()
                 self.boxes[index].state = 2
                 self.turn = 1
-            else: # defend 3 combinations
-                index = self.defend_three_combinations()
+            else:
+                index = self.defend_four_combinations()
                 if index is not None:
                     self.boxes[index].mark_o()
                     self.boxes[index].state = 2
                     self.turn = 1
-                else: #attack four combinations
-                    index = self.attack_four_combinations()
+                else: # defend 3 combinations
+                    index = self.defend_three_combinations()
                     if index is not None:
-                        print('attack')
                         self.boxes[index].mark_o()
                         self.boxes[index].state = 2
                         self.turn = 1
-                    else:
+                    else: #attack three combinations
                         index = self.attack_three_combinations()
                         if index is not None:
                             print('attack')
