@@ -242,8 +242,6 @@ class Board(object):
             for index in combination:
                 states.append(self.boxes[index].state)
             if all(x == 1 for x in states):
-                print(combination[0])
-                print(combination[1])
                 if combination[0] + self.grid_size == combination[1]: #horizontal
                     if combination[0] >= 0 and combination[0] <= self.grid_size - 1: # check left bound
                         state = self.boxes[combination[3] + self.grid_size].state
@@ -283,19 +281,59 @@ class Board(object):
                         elif state_tail == 0:
                             return combination[3] + 1
                 
-                # elif combination[0] + self.grid_size + 1 == combination[1]:
-                #     """
-                #     *
-                #      *
-                #       *
-                #     """
-                # elif combination[0] + self.grid_size - 1 == combination[1]:
+                elif combination[0] + self.grid_size + 1 == combination[1]:
+                    """
+                    *
+                     *
+                      *
+                    """
+                    if (combination[0] >= 0 and combination[0] <= self.grid_size - 1) or \
+                        (combination[0] % self.grid_size == 0):
+                        state = self.boxes[combination[3] + self.grid_size + 1].state
+                        if state == 0:
+                            return combination[3] + self.grid_size + 1
+                    elif ((combination[3] >= (self.grid_size*(self.grid_size - 1)) and \
+                        combination[3] <= (self.grid_size*self.grid_size-1))) or \
+                            ((combination[3] + 1) % self.grid_size == 0): 
+                        state = self.boxes[combination[0] - self.grid_size - 1].state
+                        if state == 0:
+                            return combination[0] - self.grid_size - 1
+                    else:
+                        state_head = self.boxes[combination[0] - self.grid_size - 1].state
+                        state_tail = self.boxes[combination[3] + self.grid_size + 1].state
+                        if state_head == 0 and state_tail == 0:
+                            return random.choice([combination[0] - self.grid_size - 1, combination[3] + self.grid_size + 1])
+                        elif state_head == 0:
+                            return combination[0] - self.grid_size - 1
+                        elif state_tail == 0:
+                            return combination[3] + self.grid_size + 1
+
+                elif combination[0] + self.grid_size - 1 == combination[1]:
                 #     """
                 #        *
                 #       *
                 #      *
                 #     """
-                # if combination[0] - 1
+                    if (combination[0] >= 0 and combination[0] <= self.grid_size - 1) or \
+                        ((combination[0] + 1) % self.grid_size == 0):
+                        state = self.boxes[combination[3] + self.grid_size - 1].state
+                        if state == 0:
+                            return combination[3] + self.grid_size - 1
+                    elif ((combination[3] >= (self.grid_size*(self.grid_size - 1)) and \
+                        combination[3] <= (self.grid_size*self.grid_size-1))) or \
+                            (combination[3] % self.grid_size == 0): 
+                        state = self.boxes[combination[0] - self.grid_size + 1].state
+                        if state == 0:
+                            return combination[0] - self.grid_size + 1
+                    else:
+                        state_head = self.boxes[combination[0] - self.grid_size + 1].state
+                        state_tail = self.boxes[combination[3] + self.grid_size - 1].state
+                        if state_head == 0 and state_tail == 0:
+                            return random.choice([combination[0] - self.grid_size + 1, combination[3] + self.grid_size - 1])
+                        elif state_head == 0:
+                            return combination[0] - self.grid_size + 1
+                        elif state_tail == 0:
+                            return combination[3] + self.grid_size - 1
         
         return None
 
