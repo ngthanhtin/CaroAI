@@ -112,7 +112,6 @@ class Board(object):
         
         def ai_2():
             index = self.find_for_four_combinations()
-            print(index)
             if index is not None:
                 self.boxes[index].mark_o()
                 self.boxes[index].state = 2
@@ -235,17 +234,42 @@ class Board(object):
                 self.three_combinations += [tuple(combination[i:i+3])]
 
     def find_for_four_combinations(self):
+        """
+        return index of moveable box
+        """
         for combination in self.four_combinations:
             states = []
             for index in combination:
                 states.append(self.boxes[index].state)
             if all(x == 1 for x in states):
-                if combination[0] + 1 == combination[1]: #vertical
-                    if combination[0] % self.grid_size == 0:
+                print(combination[0])
+                print(combination[1])
+                if combination[0] + self.grid_size == combination[1]: #horizontal
+                    if combination[0] >= 0 and combination[0] <= self.grid_size - 1: # check left bound
+                        state = self.boxes[combination[3] + self.grid_size].state
+                        if state == 0:
+                            return combination[3] + self.grid_size
+                    elif (combination[3] >= (self.grid_size*(self.grid_size - 1)) and \
+                        combination[3] <= (self.grid_size*self.grid_size-1)): #check right bound
+                        state = self.boxes[combination[0] - self.grid_size].state
+                        if state == 0:
+                            return combination[0] - self.grid_size
+                    else:
+                        state_head = self.boxes[combination[0] - self.grid_size].state
+                        state_tail = self.boxes[combination[3] + self.grid_size].state
+                        if state_head == 0 and state_tail == 0:
+                            return random.choice([combination[0] - self.grid_size, combination[3] + self.grid_size])
+                        elif state_head == 0:
+                            return combination[0] - self.grid_size
+                        elif state_tail == 0:
+                            return combination[3] + self.grid_size
+
+                elif combination[0] + 1 == combination[1]: #vertical
+                    if combination[0] % self.grid_size == 0: # check up bound
                         state = self.boxes[combination[3] + 1].state
                         if state == 0:
                             return combination[3] + 1
-                    elif (combination[3] + 1) % self.grid_size == 0:
+                    elif (combination[3] + 1) % self.grid_size == 0: # check down bound
                         state = self.boxes[combination[0] - 1].state
                         if state == 0:
                             return combination[0] - 1
@@ -258,8 +282,6 @@ class Board(object):
                             return combination[0] - 1
                         elif state_tail == 0:
                             return combination[3] + 1
-
-                # elif combination[0] + self.grid_size == combination[1]: #horizontal
                 
                 # elif combination[0] + self.grid_size + 1 == combination[1]:
                 #     """
@@ -276,6 +298,7 @@ class Board(object):
                 # if combination[0] - 1
         
         return None
+
     def check_for_winner(self):
         winner = 0
         for combination in self.winning_combinations:
