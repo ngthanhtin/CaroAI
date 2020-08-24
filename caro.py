@@ -114,7 +114,6 @@ class Board(object):
         
         def ai_2():
             index = self.find_for_four_combinations()
-            index = None
             if index is not None:
                 self.boxes[index].mark_o()
                 self.boxes[index].state = 2
@@ -176,20 +175,17 @@ class Board(object):
                         if (move + self.grid_size + 1) in possible_ai_moves:
                             possible_ai_moves.remove(move + self.grid_size + 1)
                 
-                possible_ai_moves = list(set(possible_ai_moves))
                 for move in possible_ai_moves:
                     if self.boxes[move].state != 0:
                         possible_ai_moves.remove(move)
                 
                 if len(possible_ai_moves) != 0:
                     index = random.choice(possible_ai_moves)
-                    print(index)
                     self.boxes[index].mark_o()
                     self.boxes[index].state = 2
                     self.turn = 1
                 else:
                     for index, box in enumerate(self.boxes):
-                        print("haha ", index)
                         box.mark_o()
                         box.state = 2
                         self.turn = 1
