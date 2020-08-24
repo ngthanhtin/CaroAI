@@ -194,14 +194,14 @@ class Board(object):
                     self.boxes[index].mark_o()
                     self.boxes[index].state = 2
                     self.turn = 1
-                else: # defend 3 combinations
-                    index = self.defend_three_combinations()
+                else: # attack 3 combinations
+                    index = self.attack_three_combinations()
                     if index is not None:
                         self.boxes[index].mark_o()
                         self.boxes[index].state = 2
                         self.turn = 1
-                    else: #attack three combinations
-                        index = self.attack_three_combinations()
+                    else: #defend three combinations
+                        index = self.defend_three_combinations()
                         if index is not None:
                             print('attack')
                             self.boxes[index].mark_o()
