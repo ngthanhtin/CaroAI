@@ -56,8 +56,8 @@ class Board(object):
     
     def initialize_boxes(self):
         self.boxes = []
-        self.x_boxes = []
-        self.o_boxes = []
+        self.x_moves = []
+        self.o_moves = []
 
         top_left_numbers = []
         for i in range(0, self.grid_size):
@@ -72,30 +72,32 @@ class Board(object):
     def get_box_at_pixel(self, x, y):
         for index, box in enumerate(self.boxes):
             if box.rect.collidepoint(x, y):
-                return box
-        return None
+                return index, box
+        return None, None
     
     def process_click(self, x, y):
-        box = self.get_box_at_pixel(x, y)
+        index, box = self.get_box_at_pixel(x, y)
         if box is not None and not self.game_over:
-            self.play_turn(box)
+            self.play_turn(index, box)
             self.check_game_over()
             if self.is_ai:
                 self.ai_turn()
                 self.check_game_over()
             
     
-    def play_turn(self, box):
+    def play_turn(self, index, box):
         if box.state != 0:
             return
         if self.turn == 1:
             box.mark_x()
             box.state = 1
             self.turn = 2
+            self.x_moves.append(index)
         elif self.turn == 2:
             box.mark_o()
             box.state = 2
             self.turn = 1
+            self.o_moves.append(index)
         return
 
     def ai_turn(self):
@@ -112,18 +114,86 @@ class Board(object):
         
         def ai_2():
             index = self.find_for_four_combinations()
+            index = None
             if index is not None:
                 self.boxes[index].mark_o()
                 self.boxes[index].state = 2
                 self.turn = 1
-                return
             else:
-                for index, box in enumerate(self.boxes):
-                    if box.state == 0:
+                #get possible move for AI around Xs
+                possible_ai_moves = []
+                
+                for move in self.x_moves:
+                    """
+                        * * *
+                        * x *
+                        * * *
+                    """
+                    if self.boxes[move - self.grid_size - 1].state == 0:
+                        possible_ai_moves.append(move - self.grid_size - 1)
+                    if self.boxes[move - self.grid_size].state == 0:
+                        possible_ai_moves.append(move - self.grid_size)
+                    if self.boxes[move - self.grid_size + 1].state == 0:
+                        possible_ai_moves.append(move - self.grid_size + 1)
+                    if self.boxes[move - 1].state == 0:
+                        possible_ai_moves.append(move - 1)
+                    if self.boxes[move + 1].state == 0:
+                        possible_ai_moves.append(move + 1)
+                    if self.boxes[move + self.grid_size - 1].state == 0:
+                        possible_ai_moves.append(move + self.grid_size - 1)
+                    if self.boxes[move + self.grid_size].state == 0:
+                        possible_ai_moves.append(move + self.grid_size)
+                    if self.boxes[move + self.grid_size + 1].state == 0:
+                        possible_ai_moves.append(move + self.grid_size + 1)
+
+                    # get rid of invalid moves at the boundaries
+                    if move % self.grid_size == 0:
+                        if (move - self.grid_size - 1) in possible_ai_moves:
+                            possible_ai_moves.remove(move - self.grid_size - 1)
+                        if (move - 1) in possible_ai_moves:
+                            possible_ai_moves.remove(move - 1)
+                        if (move + self.grid_size - 1) in possible_ai_moves:
+                            possible_ai_moves.remove(move + self.grid_size - 1)
+                    if (move + 1) % self.grid_size == 0:
+                        if (move - self.grid_size + 1) in possible_ai_moves:
+                            possible_ai_moves.remove(move - self.grid_size + 1)
+                        if (move + 1) in possible_ai_moves:
+                            possible_ai_moves.remove(move + 1)
+                        if (move + self.grid_size + 1) in possible_ai_moves:
+                            possible_ai_moves.remove(move + self.grid_size + 1)
+                    if move >= 0 and move <= self.grid_size - 1:
+                        if (move - self.grid_size - 1) in possible_ai_moves:
+                            possible_ai_moves.remove(move - self.grid_size - 1)
+                        if (move - self.grid_size) in possible_ai_moves:
+                            possible_ai_moves.remove(move - self.grid_size)
+                        if (move - self.grid_size + 1) in possible_ai_moves:
+                            possible_ai_moves.remove(move - self.grid_size + 1)
+                    if move >= self.grid_size*(self.grid_size-1) and move <= self.grid_size*self.grid_size - 1:
+                        if (move + self.grid_size - 1) in possible_ai_moves:
+                            possible_ai_moves.remove(move + self.grid_size - 1)
+                        if (move + self.grid_size) in possible_ai_moves:
+                            possible_ai_moves.remove(move + self.grid_size)
+                        if (move + self.grid_size + 1) in possible_ai_moves:
+                            possible_ai_moves.remove(move + self.grid_size + 1)
+                
+                possible_ai_moves = list(set(possible_ai_moves))
+                for move in possible_ai_moves:
+                    if self.boxes[move].state != 0:
+                        possible_ai_moves.remove(move)
+                
+                if len(possible_ai_moves) != 0:
+                    index = random.choice(possible_ai_moves)
+                    print(index)
+                    self.boxes[index].mark_o()
+                    self.boxes[index].state = 2
+                    self.turn = 1
+                else:
+                    for index, box in enumerate(self.boxes):
+                        print("haha ", index)
                         box.mark_o()
                         box.state = 2
                         self.turn = 1
-                        return
+                        break
 
         ai_2()
         
