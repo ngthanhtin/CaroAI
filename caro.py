@@ -252,7 +252,9 @@ class Board(object):
         four_combinations_2_path = "patterns\\four_combinations_2.txt"
         four_combinations_3_path = "patterns\\four_combinations_3.txt"
         four_combinations_4_path = "patterns\\four_combinations_4.txt"
-        three_combinations_path = "patterns\\three_combinations.txt"
+        three_combinations_1_path = "patterns\\three_combinations_1.txt"
+        three_combinations_2_path = "patterns\\three_combinations_2.txt"
+        three_combinations_3_path = "patterns\\three_combinations_3.txt"
 
         # load pattern
         is_exist_1, self.winning_combinations = read_combinations_file(winning_combinations_path) # x x x x x
@@ -260,9 +262,12 @@ class Board(object):
         is_exist_3, self.four_combinations_2 = read_combinations_file(four_combinations_2_path) # x x _ x x
         is_exist_4, self.four_combinations_3 = read_combinations_file(four_combinations_3_path) # x _ x x x
         is_exist_5, self.four_combinations_4 = read_combinations_file(four_combinations_4_path) # x x x _ x
-        is_exist_6, self.three_combinations = read_combinations_file(three_combinations_path) # x x x
+        is_exist_6, self.three_combinations_1 = read_combinations_file(three_combinations_1_path) # x x x
+        is_exist_7, self.three_combinations_2 = read_combinations_file(three_combinations_2_path) # x _ x x
+        is_exist_8, self.three_combinations_3 = read_combinations_file(three_combinations_3_path) # x x _ x
         
-        if is_exist_1 and is_exist_2 and is_exist_3 and is_exist_4 and is_exist_5 and is_exist_6:
+        if is_exist_1 and is_exist_2 and is_exist_3 and is_exist_4 and \
+             is_exist_5 and is_exist_6 and is_exist_7 and is_exist_8:
             return
         
         indices = [x for x in range(0, self.grid_size * self.grid_size)]
@@ -373,18 +378,30 @@ class Board(object):
         for combination in self.winning_combinations:
             self.four_combinations_4 += [tuple(combination[0:3]) + tuple(combination[4:5])]
 
-        # calculate three combinations
+        # calculate three combinations 1 x x x
         for combination in self.winning_combinations:
             for i in range(5 - 3 + 1):
-                self.three_combinations += [tuple(combination[i:i+3])]
+                self.three_combinations_1 += [tuple(combination[i:i+3])]
 
+        # calculate three combinations 2  x _ x x
+        for combination in self.winning_combinations:
+            self.three_combinations_2 += [tuple(combination[0:1]) + tuple(combination[2:4])]
+            self.three_combinations_2 += [tuple(combination[1:2]) + tuple(combination[3:5])]
+        
+        # calculate three combinations 3 x x _ x
+        for combination in self.winning_combinations:
+            self.three_combinations_3 += [tuple(combination[0:2]) + tuple(combination[3:4])]
+            self.three_combinations_3 += [tuple(combination[1:3]) + tuple(combination[4:5])]
+        
         #save pattern
         write_combinations_file(winning_combinations_path, self.winning_combinations)
         write_combinations_file(four_combinations_1_path, self.four_combinations_1)
         write_combinations_file(four_combinations_2_path, self.four_combinations_2)
         write_combinations_file(four_combinations_3_path, self.four_combinations_3)
         write_combinations_file(four_combinations_4_path, self.four_combinations_4)
-        write_combinations_file(three_combinations_path, self.three_combinations)
+        write_combinations_file(three_combinations_1_path, self.three_combinations_1)
+        write_combinations_file(three_combinations_2_path, self.three_combinations_2)
+        write_combinations_file(three_combinations_3_path, self.three_combinations_3)
 
 
     def defend_four_combinations(self):
@@ -563,7 +580,7 @@ class Board(object):
         """
         top1_defend = []
         top2_defend = []
-        for combination in self.three_combinations:
+        for combination in self.three_combinations_1:
             states = []
             for index in combination:
                 states.append(self.boxes[index].state)
@@ -778,7 +795,7 @@ class Board(object):
         """
         top1_attack = [] # a spectrum that is not blocked
         top2_attack = [] # a spectrum that is blocked one end
-        for combination in self.three_combinations:
+        for combination in self.three_combinations_1:
             states = []
             for index in combination:
                 states.append(self.boxes[index].state)
