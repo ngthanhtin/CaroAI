@@ -356,11 +356,23 @@ class Board(object):
             for u in range(len(tmp) - 4):
                 self.winning_combinations += [tuple(tmp[u:u+5])]
 
-        # calculate four combinations
+        # calculate four combinations 1 x x x x _
         for combination in self.winning_combinations:
             for i in range(5 - 4 + 1):
                 self.four_combinations_1 += [tuple(combination[i:i+4])]
         
+        # calculate four combinations 2 x x _ x x
+        for combination in self.winning_combinations:
+            self.four_combinations_2 += [tuple(combination[0:2]) + tuple(combination[3:5])]
+        
+        # calculate four combinations 3 x _ x x x
+        for combination in self.winning_combinations:
+            self.four_combinations_3 += [tuple(combination[0]) + tuple(combination[2:5])]
+        
+        # calculate four combinations 4 x x x _ x
+        for combination in self.winning_combinations:
+            self.four_combinations_4 += [tuple(combination[0:3]) + tuple(combination[4])]
+
         # calculate three combinations
         for combination in self.winning_combinations:
             for i in range(5 - 3 + 1):
