@@ -367,11 +367,11 @@ class Board(object):
         
         # calculate four combinations 3 x _ x x x
         for combination in self.winning_combinations:
-            self.four_combinations_3 += [tuple(combination[0]) + tuple(combination[2:5])]
+            self.four_combinations_3 += [tuple(combination[0:1]) + tuple(combination[2:5])]
         
         # calculate four combinations 4 x x x _ x
         for combination in self.winning_combinations:
-            self.four_combinations_4 += [tuple(combination[0:3]) + tuple(combination[4])]
+            self.four_combinations_4 += [tuple(combination[0:3]) + tuple(combination[4:5])]
 
         # calculate three combinations
         for combination in self.winning_combinations:
