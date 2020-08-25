@@ -887,6 +887,72 @@ class Board(object):
                         elif state_tail == 0:
                             return combination[3] + self.grid_size - 1
         
+        for combination in self.four_combinations_2:
+            states = []
+            for index in combination:
+                states.append(self.boxes[index].state)
+            if all(x == 2 for x in states):
+                if combination[0] + self.grid_size == combination[1]: #horizontal
+                    state = self.boxes[combination[1] + self.grid_size].state
+                    if state == 0:
+                        return combination[1] + self.grid_size
+                elif combination[0] + 1 == combination[1]: #vertical
+                    state = self.boxes[combination[1] + 1].state
+                    if state == 0:
+                        return combination[1] + 1
+                elif combination[0] + self.grid_size + 1 == combination[1]:
+                    state = self.boxes[combination[1] + self.grid_size + 1].state
+                    if state == 0:
+                        return combination[1] + self.grid_size + 1
+                elif combination[0] + self.grid_size - 1 == combination[1]:
+                    state = self.boxes[combination[1] + self.grid_size - 1].state
+                    if state == 0:
+                        return combination[1] + self.grid_size - 1
+        
+        for combination in self.four_combinations_3:
+            states = []
+            for index in combination:
+                states.append(self.boxes[index].state)
+            if all(x == 2 for x in states):
+                if combination[1] + self.grid_size == combination[2]: #horizontal
+                    state = self.boxes[combination[0] + self.grid_size].state
+                    if state == 0:
+                        return combination[0] + self.grid_size
+                elif combination[1] + 1 == combination[2]: #vertical
+                    state = self.boxes[combination[0] + 1].state
+                    if state == 0:
+                        return combination[0] + 1
+                elif combination[1] + self.grid_size + 1 == combination[2]:
+                    state = self.boxes[combination[0] + self.grid_size + 1].state
+                    if state == 0:
+                        return combination[0] + self.grid_size + 1
+                elif combination[1] + self.grid_size - 1 == combination[2]:
+                    state = self.boxes[combination[0] + self.grid_size - 1].state
+                    if state == 0:
+                        return combination[0] + self.grid_size - 1
+
+        for combination in self.four_combinations_4:
+            states = []
+            for index in combination:
+                states.append(self.boxes[index].state)
+            if all(x == 2 for x in states):
+                if combination[0] + self.grid_size == combination[1]: #horizontal
+                    state = self.boxes[combination[2] + self.grid_size].state
+                    if state == 0:
+                        return combination[2] + self.grid_size
+                elif combination[0] + 1 == combination[1]: #vertical
+                    state = self.boxes[combination[2] + 1].state
+                    if state == 0:
+                        return combination[2] + 1
+                elif combination[0] + self.grid_size + 1 == combination[1]:
+                    state = self.boxes[combination[2] + self.grid_size + 1].state
+                    if state == 0:
+                        return combination[2] + self.grid_size + 1
+                elif combination[0] + self.grid_size - 1 == combination[1]:
+                    state = self.boxes[combination[2] + self.grid_size - 1].state
+                    if state == 0:
+                        return combination[2] + self.grid_size - 1
+
         return None
 
     def attack_three_combinations(self):
