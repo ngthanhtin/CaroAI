@@ -247,12 +247,12 @@ class Board(object):
                         f.write("{}\n".format(index))
             
         # file path
-        winning_combinations_path = "patterns\wining_combinations.txt"
-        four_combinations_1_path = "patterns\4_combinations_1.txt"
-        four_combinations_2_path = "patterns\4_combinations_2.txt"
-        four_combinations_3_path = "patterns\4_combinations_3.txt"
-        four_combinations_4_path = "patterns\4_combinations_4.txt"
-        three_combinations_path = "patterns\3_combinations.txt"
+        winning_combinations_path = "patterns\\wining_combinations.txt"
+        four_combinations_1_path = "patterns\\four_combinations_1.txt"
+        four_combinations_2_path = "patterns\\four_combinations_2.txt"
+        four_combinations_3_path = "patterns\\four_combinations_3.txt"
+        four_combinations_4_path = "patterns\\four_combinations_4.txt"
+        three_combinations_path = "patterns\\three_combinations.txt"
 
         # load pattern
         is_exist_1, self.winning_combinations = read_combinations_file(winning_combinations_path) # x x x x x
@@ -379,12 +379,6 @@ class Board(object):
                 self.three_combinations += [tuple(combination[i:i+3])]
 
         #save pattern
-        winning_combinations_path = "patterns\wining_combinations.txt"
-        four_combinations_1_path = "patterns\4_combinations_1.txt"
-        four_combinations_2_path = "patterns\4_combinations_2.txt"
-        four_combinations_3_path = "patterns\4_combinations_3.txt"
-        four_combinations_4_path = "patterns\4_combinations_4.txt"
-        three_combinations_path = "patterns\3_combinations.txt"
         write_combinations_file(winning_combinations_path, self.winning_combinations)
         write_combinations_file(four_combinations_1_path, self.four_combinations_1)
         write_combinations_file(four_combinations_2_path, self.four_combinations_2)
