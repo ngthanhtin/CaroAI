@@ -1098,5 +1098,5 @@ class Board(object):
             text = 'Draw!'
         text = font.render(text, True, BLACK, WHITE)
         rect = text.get_rect()
-        rect.center = (surface_size / 2, surface_size / 2)
+        rect.center = (surface_size / 2, 100)
         self.surface.blit(text, rect)
