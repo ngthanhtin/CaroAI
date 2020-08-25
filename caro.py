@@ -680,6 +680,106 @@ class Board(object):
                         elif state_tail == 0:
                             top2_defend.append( combination[2] + self.grid_size - 1)
         
+        for combination in self.three_combinations_2:
+            states = []
+            for index in combination:
+                states.append(self.boxes[index].state)
+            if all(x == 1 for x in states):
+                if combination[1] + self.grid_size == combination[2]: #horizontal
+                    if combination[0] - self.grid_size >= 0 and \
+                        combination[2] + self.grid_size <= self.grid_size*(self.grid_size - 1):
+                        if self.boxes[combination[0] - self.grid_size].state != 0 or \
+                             self.boxes[combination[2] + self.grid_size].state != 0:
+                            continue
+                        else:
+                            state = self.boxes[combination[0] + self.grid_size].state
+                            if state == 0:
+                                return combination[0] + self.grid_size
+                elif combination[1] + 1 == combination[2]: #vertical
+                    if combination[0] % self.grid_size != 0 and \
+                        (combination[2] + 1) % self.grid_size != 0:
+                        if self.boxes[combination[0] - 1].state != 0 or \
+                             self.boxes[combination[2] + 1].state != 0:
+                            continue
+                        else:
+                            state = self.boxes[combination[0] + 1].state
+                            if state == 0:
+                                return combination[0] + 1
+                elif combination[1] + self.grid_size + 1 == combination[2]:
+                    if combination[0] % self.grid_size != 0 and \
+                        (combination[0] > self.grid_size - 1) and \
+                            ((combination[2] + 1) % self.grid_size != 0) and \
+                                (combination[2] < self.grid_size*(self.grid_size - 1)):
+                                    if self.boxes[combination[0] - self.grid_size - 1].state != 0 or \
+                                        self.boxes[combination[2] + self.grid_size + 1].state != 0:
+                                        continue
+                                    else:
+                                        state = self.boxes[combination[0] + self.grid_size + 1].state
+                                        if state == 0:
+                                            return combination[0] + self.grid_size + 1
+                elif combination[1] + self.grid_size - 1 == combination[2]:    
+                    if combination[0] > self.grid_size + 1 and \
+                        (combination[0] + 1) % self.grid_size != 0 and \
+                            combination[2] % self.grid_size != 0 and \
+                                combination[2] < self.grid_size * (self.grid_size - 1)-2:
+                                if self.boxes[combination[0] - self.grid_size + 1].state != 0 or \
+                                    self.boxes[combination[2] + self.grid_size - 1].state != 0:
+                                    continue
+                                else:
+                                    state = self.boxes[combination[0] + self.grid_size - 1].state
+                                    if state == 0:
+                                        return combination[0] + self.grid_size - 1
+
+        for combination in self.three_combinations_3:
+            states = []
+            for index in combination:
+                states.append(self.boxes[index].state)
+            if all(x == 1 for x in states):
+                if combination[0] + self.grid_size == combination[1]: #horizontal
+                    if combination[0] - self.grid_size >= 0 and \
+                        combination[2] + self.grid_size <= self.grid_size*(self.grid_size - 1):
+                        if self.boxes[combination[0] - self.grid_size].state != 0 or \
+                             self.boxes[combination[2] + self.grid_size].state != 0:
+                            continue
+                        else:
+                            state = self.boxes[combination[1] + self.grid_size].state
+                            if state == 0:
+                                return combination[1] + self.grid_size
+                elif combination[0] + 1 == combination[1]: #vertical
+                    if combination[0] % self.grid_size != 0 and \
+                        (combination[2] + 1) % self.grid_size != 0:
+                        if self.boxes[combination[0] - 1].state != 0 or \
+                             self.boxes[combination[2] + 1].state != 0:
+                            continue
+                        else:
+                            state = self.boxes[combination[1] + 1].state
+                            if state == 0:
+                                return combination[1] + 1
+                elif combination[0] + self.grid_size + 1 == combination[1]:
+                    if combination[0] % self.grid_size != 0 and \
+                        (combination[0] > self.grid_size - 1) and \
+                            ((combination[2] + 1) % self.grid_size != 0) and \
+                                (combination[2] < self.grid_size*(self.grid_size - 1)):
+                                    if self.boxes[combination[0] - self.grid_size - 1].state != 0 or \
+                                        self.boxes[combination[2] + self.grid_size + 1].state != 0:
+                                        continue
+                                    else:
+                                        state = self.boxes[combination[1] + self.grid_size + 1].state
+                                        if state == 0:
+                                            return combination[1] + self.grid_size + 1
+                elif combination[0] + self.grid_size - 1 == combination[1]:  
+                    if combination[0] > self.grid_size + 1 and \
+                        (combination[0] + 1) % self.grid_size != 0 and \
+                            combination[2] % self.grid_size != 0 and \
+                                combination[2] < self.grid_size * (self.grid_size - 1)-2:
+                                if self.boxes[combination[0] - self.grid_size + 1].state != 0 or \
+                                    self.boxes[combination[2] + self.grid_size - 1].state != 0:
+                                    continue
+                                else:
+                                    state = self.boxes[combination[1] + self.grid_size - 1].state
+                                    if state == 0:
+                                        return combination[1] + self.grid_size - 1  
+          
         return None
 
     def defend_two_combinations(self):
