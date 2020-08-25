@@ -1,5 +1,5 @@
 import pygame, itertools
-import random
+import random, os
 
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
@@ -221,10 +221,50 @@ class Board(object):
         ai_2()
         
     def calculate_winners(self):
-        self.winning_combinations = []
-        self.four_combinations = []
-        self.three_combinations = []
+        """
+        Create combination patterns of a chess 
+        """
+        def read_combinations_file(file_path):
+            combinations_list  = []
+            if os.path.isfile(file_path):
+                f = open(file_path, "r")
+                for line in f.readlines():
+                    linestr = line.strip()
+                    combination = tuple(map(int, linestr.split()))
+                    combinations_list += [combination]
+            
+            if len(combinations_list) == 0:
+                return False, combinations_list
+            return True, combinations_list
+        
+        def write_combinations_file(file_path, combinations):
+            f = open(file_path, "w")
+            for combination in combinations:
+                for i, index in enumerate(combination):
+                    if i != len(combination) - 1:
+                        f.write("{} ".format(index))
+                    else:
+                        f.write("{}\n".format(index))
+            
+        # file path
+        winning_combinations_path = "patterns\wining_combinations.txt"
+        four_combinations_1_path = "patterns\4_combinations_1.txt"
+        four_combinations_2_path = "patterns\4_combinations_2.txt"
+        four_combinations_3_path = "patterns\4_combinations_3.txt"
+        four_combinations_4_path = "patterns\4_combinations_4.txt"
+        three_combinations_path = "patterns\3_combinations.txt"
 
+        # load pattern
+        is_exist_1, self.winning_combinations = read_combinations_file(winning_combinations_path) # x x x x x
+        is_exist_2, self.four_combinations_1 = read_combinations_file(four_combinations_1_path) # x x x x _
+        is_exist_3, self.four_combinations_2 = read_combinations_file(four_combinations_2_path) # x x _ x x
+        is_exist_4, self.four_combinations_3 = read_combinations_file(four_combinations_3_path) # x _ x x x
+        is_exist_5, self.four_combinations_4 = read_combinations_file(four_combinations_4_path) # x x x _ x
+        is_exist_6, self.three_combinations = read_combinations_file(three_combinations_path) # x x x
+        
+        if is_exist_1 and is_exist_2 and is_exist_3 and is_exist_4 and is_exist_5 and is_exist_6:
+            return
+        
         indices = [x for x in range(0, self.grid_size * self.grid_size)]
         
         # Vertical combinations
@@ -319,18 +359,33 @@ class Board(object):
         # calculate four combinations
         for combination in self.winning_combinations:
             for i in range(5 - 4 + 1):
-                self.four_combinations += [tuple(combination[i:i+4])]
+                self.four_combinations_1 += [tuple(combination[i:i+4])]
         
         # calculate three combinations
         for combination in self.winning_combinations:
             for i in range(5 - 3 + 1):
                 self.three_combinations += [tuple(combination[i:i+3])]
 
+        #save pattern
+        winning_combinations_path = "patterns\wining_combinations.txt"
+        four_combinations_1_path = "patterns\4_combinations_1.txt"
+        four_combinations_2_path = "patterns\4_combinations_2.txt"
+        four_combinations_3_path = "patterns\4_combinations_3.txt"
+        four_combinations_4_path = "patterns\4_combinations_4.txt"
+        three_combinations_path = "patterns\3_combinations.txt"
+        write_combinations_file(winning_combinations_path, self.winning_combinations)
+        write_combinations_file(four_combinations_1_path, self.four_combinations_1)
+        write_combinations_file(four_combinations_2_path, self.four_combinations_2)
+        write_combinations_file(four_combinations_3_path, self.four_combinations_3)
+        write_combinations_file(four_combinations_4_path, self.four_combinations_4)
+        write_combinations_file(three_combinations_path, self.three_combinations)
+
+
     def defend_four_combinations(self):
         """
         return index of moveable box
         """
-        for combination in self.four_combinations:
+        for combination in self.four_combinations_1:
             states = []
             for index in combination:
                 states.append(self.boxes[index].state)
@@ -545,7 +600,7 @@ class Board(object):
         """
         return index of attackable box
         """
-        for combination in self.four_combinations:
+        for combination in self.four_combinations_1:
             states = []
             for index in combination:
                 states.append(self.boxes[index].state)
